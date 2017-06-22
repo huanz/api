@@ -1,0 +1,44 @@
+{
+    "name": "api",
+    "version": "1.0.0",
+    "description": "koa2 api server",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node ./src/app.js",
+        "dev": "nodemon"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/huanz/api.git"
+    },
+    "keywords": [
+        "koa",
+        "koa2",
+        "api"
+    ],
+    "author": "bukas",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/huanz/api/issues"
+    },
+    "homepage": "https://github.com/huanz/api#readme",
+    "dependencies": {
+        "exceljs": "^0.4.12",
+        "kcors": "^2.2.1",
+        "koa": "^2.3.0",
+        "koa-body": "^2.1.0",
+        "koa-helmet": "^3.2.0",
+        "koa-json-error": "^3.1.2",
+        "koa-logger": "^3.0.0",
+        "koa-router": "^7.2.1",
+        "leanengine": "^2.0.3",
+        "request": "^2.81.0",
+        "request-promise-native": "^1.0.4"
+    },
+    "engines": {
+        "node": ">= 8.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.11.0"
+    }
+}

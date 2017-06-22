@@ -1,0 +1,11 @@
+{
+    "script": "./src/server.js",
+    "ext": "js json",
+    "watch": [
+        "src/"
+    ],
+    "ignore": [
+        ".git",
+        "node_modules"
+    ]
+}
