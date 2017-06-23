@@ -2,6 +2,7 @@
  * @desc apis
  */
 const fs = require('fs');
+const PassThrough = require('stream').PassThrough;
 const path = require('path');
 const request = require('request-promise-native');
 const Excel = require('exceljs');
@@ -9,7 +10,7 @@ const Excel = require('exceljs');
 /**
  * @desc 节假日查询：http://www.easybots.cn/holiday_api.net
  */
-exports.holiday = async(ctx, next) => {
+exports.holiday = async (ctx, next) => {
     let res = await request.get('http://www.easybots.cn/api/holiday.php', {
         qs: ctx.query
     });
@@ -32,29 +33,52 @@ async function getXlsxTemplate() {
 
 /**
  * @desc 生成xlsx
- * @param ctx.body.name 表格
  */
-exports.xlsx = async(ctx, next) => {
-    let query = ctx.query;
-    console.log(query);
-    const wb = await getXlsxTemplate();
+exports.xlsx = async (ctx, next) => {
+    let data = ctx.query.data;
+    if (data) {
+        try {
+            let req = JSON.parse(data);
+            if (req && req.meals && req.meals.length) {
+                let workbook = new Excel.Workbook();
+                let mealSheet = workbook.addWorksheet('加班餐费明细', {
+                    properties: {
+                        defaultRowHeight: 25
+                    },
+                    pageSetup: {
+                        paperSize: 9,
+                        horizontalCentered: true,
+                        verticalCentered: true
+                    }
+                });
+                mealSheet.columns = [
+                    { key: 'no', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
+                    { key: 'date', width: 15,  style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
+                    { key: 'name', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
+                    { key: 'type', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
+                    { key: 'money', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
+                    { key: 'etc', width: 15 , style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}}
+                ];
+                // 增加表头
+                let header = mealSheet.addRow(['交通费明细单']);
+                header.height = 25;
+                header.font = {
+                    bold: true
+                };
+                mealSheet.mergeCells('A1:F1');
 
-    // if (body.meals && body.meals.length) {
+                req.meals.forEach(meal => {
+                    let row = mealSheet.addRow(meal);
+                    row.height = 25;
+                });
 
-    // }
-    // wb.eachSheet((worksheet, sheetId) => {
-    //     console.log(sheetId);
-    //     worksheet.getRow(i+2).values = row;
-    //     worksheet.getCell("A"+(i+2)).style=worksheet.getCell('A2').style;
-    //     worksheet.getCell("B"+(i+2)).style=worksheet.getCell('B2').style;
-    //     worksheet.getCell("C"+(i+2)).style=worksheet.getCell('C2').style;
-    //     worksheet.getCell("D"+(i+2)).style=worksheet.getCell('D2').style;
-    //     worksheet.getCell("E"+(i+2)).style=worksheet.getCell('E2').style;
-    //     worksheet.getCell("F"+(i+2)).style=worksheet.getCell('F2').style;
-    // });
+                const stream = new PassThrough();
+                await workbook.xlsx.write(stream);
+                ctx.body = stream;
+                ctx.set('Content-disposition', `attachment; filename=${req.name}.xlsx`);
+            }
+        } catch (error) {
 
-    ctx.body = {
-        hello: 'bukas',
-    };
-    //ctx.set('Content-disposition', `attachment; filename=${body.name}.xlsx`);
+        }
+    }
 };
