@@ -54,7 +54,7 @@ exports.xlsx = async(ctx, next) => {
     // });
 
     ctx.body = {
-        hello: 'bukas';
+        hello: 'bukas',
     };
     //ctx.set('Content-disposition', `attachment; filename=${body.name}.xlsx`);
 };
