@@ -35,8 +35,8 @@ async function getXlsxTemplate() {
  * @param ctx.body.name 表格
  */
 exports.xlsx = async(ctx, next) => {
-    let body = ctx.body;
-
+    let query = ctx.query;
+    console.log(query);
     const wb = await getXlsxTemplate();
 
     // if (body.meals && body.meals.length) {
@@ -53,6 +53,8 @@ exports.xlsx = async(ctx, next) => {
     //     worksheet.getCell("F"+(i+2)).style=worksheet.getCell('F2').style;
     // });
 
-    // ctx.body = 'ff';
+    ctx.body = {
+        hello: 'bukas';
+    };
     //ctx.set('Content-disposition', `attachment; filename=${body.name}.xlsx`);
 };
