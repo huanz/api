@@ -23,10 +23,10 @@
     },
     "homepage": "https://github.com/huanz/api#readme",
     "dependencies": {
-        "exceljs": "^0.4.12",
+        "exceljs": "^0.4.13",
         "kcors": "^2.2.1",
         "koa": "^2.3.0",
-        "koa-body": "^2.1.0",
+        "koa-body": "^2.3.0",
         "koa-helmet": "^3.2.0",
         "koa-json-error": "^3.1.2",
         "koa-logger": "^3.0.0",

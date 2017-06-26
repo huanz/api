@@ -1,16 +1,14 @@
 /**
  * @desc apis
  */
-const fs = require('fs');
 const PassThrough = require('stream').PassThrough;
-const path = require('path');
 const request = require('request-promise-native');
-const Excel = require('exceljs');
+const createXlsx = require('../utils/xlsx');
 
 /**
  * @desc 节假日查询：http://www.easybots.cn/holiday_api.net
  */
-exports.holiday = async (ctx, next) => {
+exports.holiday = async(ctx, next) => {
     let res = await request.get('http://www.easybots.cn/api/holiday.php', {
         qs: ctx.query
     });
@@ -19,60 +17,33 @@ exports.holiday = async (ctx, next) => {
     }
 };
 
-async function getXlsxTemplate() {
-    const workbook = new Excel.Workbook();
-    if (global.wb) {
-        return global.wb;
-    }
-    const wb = await workbook.xlsx.readFile(path.join(__dirname, '..', 'config', 'template.xlsx'))
-    if (wb) {
-        global.wb = wb;
-        return wb;
-    }
-}
-
 /**
  * @desc 生成xlsx
  */
-exports.xlsx = async (ctx, next) => {
+exports.xlsx = async(ctx, next) => {
     let data = ctx.query.data;
     if (data) {
         try {
             let req = JSON.parse(data);
             if (req && req.meals && req.meals.length) {
-                let workbook = new Excel.Workbook();
-                let mealSheet = workbook.addWorksheet('加班餐费明细', {
-                    properties: {
-                        defaultRowHeight: 25
-                    },
-                    pageSetup: {
-                        paperSize: 9,
-                        horizontalCentered: true,
-                        verticalCentered: true
-                    }
-                });
-                mealSheet.columns = [
-                    { key: 'no', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
-                    { key: 'date', width: 15,  style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
-                    { key: 'name', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
-                    { key: 'type', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
-                    { key: 'money', width: 15, style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}},
-                    { key: 'etc', width: 15 , style: {font: { size: 12, name: '宋体' }, alignment:{ horizontal: 'center', vertical: 'middle'}}}
-                ];
-                // 增加表头
-                let header = mealSheet.addRow(['交通费明细单']);
-                header.height = 25;
-                header.font = {
-                    bold: true
-                };
-                mealSheet.mergeCells('A1:F1');
+                let sheets = [{
+                    name: '加班餐费明细',
+                    title: '加班餐费明细单',
+                    header: ['发票序号', '加班时间', '用餐人员', '中餐/晚餐', '金额', '备注'],
+                    rows: req.meals,
+                    count: 4
+                }];
 
-                req.meals.forEach(meal => {
-                    let row = mealSheet.addRow(meal);
-                    row.height = 25;
-                });
-
-                const stream = new PassThrough();
+                if (req.traffic && req.traffic.length) {
+                    sheets.push({
+                        name: '加班餐费明细',
+                        title: '加班餐费明细单',
+                        header: ['发票序号', '时间', '出发地', '目的地', '事由', '金额', '备注'],
+                        rows: req.traffic
+                    });
+                }
+                let workbook = createXlsx(sheets);
+                let stream = new PassThrough();
                 await workbook.xlsx.write(stream);
                 ctx.body = stream;
                 ctx.set('Content-disposition', `attachment; filename=${req.name}.xlsx`);
