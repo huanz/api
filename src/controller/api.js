@@ -36,8 +36,8 @@ exports.xlsx = async(ctx, next) => {
 
                 if (req.traffic && req.traffic.length) {
                     sheets.push({
-                        name: '加班餐费明细',
-                        title: '加班餐费明细单',
+                        name: '交通费明细',
+                        title: '交通费明细单',
                         header: ['发票序号', '时间', '出发地', '目的地', '事由', '金额', '备注'],
                         rows: req.traffic
                     });
