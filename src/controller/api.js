@@ -46,7 +46,8 @@ exports.xlsx = async(ctx, next) => {
                 let stream = new PassThrough();
                 await workbook.xlsx.write(stream);
                 ctx.body = stream;
-                ctx.set('Content-disposition', `attachment; filename=${req.name}.xlsx`);
+                ctx.set('Content-disposition', `attachment; filename=${encodeURIComponent(req.name)}.xlsx`);
+                ctx.set('Content-type', 'xlsx');
             }
         } catch (error) {
 
