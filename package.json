@@ -4,7 +4,8 @@
     "description": "koa2 api server",
     "main": "src/server.js",
     "scripts": {
-        "start": "node ./src/server.js",
+        "start": "node src/server.js",
+        "pm2": "NODE_ENV=production pm2 start src/server.js && pm2 logs",
         "dev": "nodemon"
     },
     "repository": {
