@@ -5,7 +5,7 @@
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
-        "pm2": "NODE_ENV=production pm2 start src/server.js && pm2 logs",
+        "pm2": "NODE_ENV=production pm2 start src/server.js -i 2 --name \"api\" --max-memory-restart 300M --merge-logs --log-date-format=\"YYYY-MM-DD HH:mm Z\" --output=\"log/production.log\"",
         "dev": "nodemon"
     },
     "repository": {
