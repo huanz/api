@@ -54,3 +54,9 @@ exports.xlsx = async(ctx, next) => {
         }
     }
 };
+
+exports.webhook = async(ctx, next) => {
+    console.log(ctx.query);
+    console.log(ctx.body);
+    ctx.body = 'hello world';
+};
