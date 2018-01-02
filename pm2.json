@@ -2,8 +2,7 @@
     "apps": [
         {
             "name": "baoxiao",
-            "cwd": "./src/",
-            "script": "./server.js",
+            "script": "./src/server.js",
             "instances": 0,
             "exec_mode": "cluster",
             "env": {
