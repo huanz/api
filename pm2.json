@@ -1,0 +1,15 @@
+{
+    "apps": [
+        {
+            "name": "api",
+            "cwd": "./src/",
+            "script": "./server.js",
+            "instances": 0,
+            "exec_mode": "cluster",
+            "env": {
+                "NODE_ENV": "production",
+                "PORT": 3000
+            }
+        }
+    ]
+}

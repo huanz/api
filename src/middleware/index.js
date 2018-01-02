@@ -1,12 +1,10 @@
 const path = require('path');
-const AV = require('leanengine');
 const body = require('koa-body');
 const cors = require('kcors');
 const helmet = require('koa-helmet');
 const error = require('koa-json-error');
 
 let middlewares = [
-    AV.koa(),
     body({
         formidable: {
             uploadDir: path.join(process.cwd(), 'upload')

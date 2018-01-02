@@ -5,7 +5,7 @@
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
-        "pm2": "NODE_ENV=production pm2 start src/server.js -i 2 --name \"api\" --max-memory-restart 300M --merge-logs --log-date-format=\"YYYY-MM-DD HH:mm Z\" --output=\"log/production.log\"",
+        "pm2": "pm2 startOrRestart pm2.json",
         "dev": "nodemon"
     },
     "repository": {
@@ -24,7 +24,7 @@
     },
     "homepage": "https://github.com/huanz/api#readme",
     "dependencies": {
-        "exceljs": "^0.5.1",
+        "exceljs": "^0.8.1",
         "kcors": "^2.2.1",
         "koa": "^2.3.0",
         "koa-body": "^2.3.0",
@@ -32,8 +32,6 @@
         "koa-json-error": "^3.1.2",
         "koa-logger": "^3.0.1",
         "koa-router": "^7.2.1",
-        "leancloud-storage": "^3.1.0",
-        "leanengine": "^3.0.0",
         "request": "^2.81.0",
         "request-promise-native": "^1.0.4"
     },
